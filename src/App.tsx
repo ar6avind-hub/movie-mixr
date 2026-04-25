@@ -44,6 +44,7 @@ const App = () => (
               }
             />
             <Route path="/playlist/:id" element={<PlaylistDetail />} />
+            <Route path="/user/:username" element={<UserProfile />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
