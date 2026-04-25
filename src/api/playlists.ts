@@ -7,12 +7,19 @@ export type Playlist = {
   description: string | null;
   cover_emoji: string | null;
   is_public: boolean;
+  genre: string | null;
   created_at: string;
   updated_at: string;
   movie_count?: number;
 };
 
 export type PlaylistWithOwner = Playlist & {
+  owner_display_name: string | null;
+};
+
+export type DiscoverSort = "newest" | "most_movies";
+
+export type DiscoverPlaylist = Playlist & {
   owner_display_name: string | null;
 };
 
