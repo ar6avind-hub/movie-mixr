@@ -203,6 +203,15 @@ const UserProfile = () => {
           </>
         )}
       </main>
+
+      {profile && isOwner && (
+        <EditProfileDialog
+          open={editOpen}
+          onOpenChange={setEditOpen}
+          profile={profile}
+          onSave={handleSave}
+        />
+      )}
     </div>
   );
 };
