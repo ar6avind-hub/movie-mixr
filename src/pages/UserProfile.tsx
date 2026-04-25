@@ -56,7 +56,9 @@ const UserProfile = () => {
     return () => {
       active = false;
     };
-  }, [username]);
+  }, [username, user?.id]);
+
+  const publicCount = playlists.filter((p) => p.is_public).length;
 
   const initials = (profile?.display_name ?? profile?.username ?? "?")
     .trim()
@@ -124,8 +126,16 @@ const UserProfile = () => {
                 </div>
               </div>
               <div className="text-right text-xs uppercase tracking-widest text-muted-foreground">
-                {playlists.length}{" "}
-                {playlists.length === 1 ? "playlist" : "playlists"}
+                <div>
+                  {publicCount}{" "}
+                  {publicCount === 1 ? "public playlist" : "public playlists"}
+                </div>
+                {isOwner && playlists.length > publicCount && (
+                  <div className="mt-1 flex items-center justify-end gap-1 text-foreground/60">
+                    <Lock className="h-3 w-3" />
+                    {playlists.length - publicCount} private
+                  </div>
+                )}
               </div>
             </header>
 
