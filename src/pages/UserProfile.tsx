@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, AtSign, Calendar, Lock } from "lucide-react";
+import { ArrowLeft, AtSign, Calendar, Lock, Pencil, Sparkles } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { DiscoverCard } from "@/components/DiscoverCard";
 import { Button } from "@/components/ui/button";
+import { EditProfileDialog } from "@/components/EditProfileDialog";
 import {
   fetchPlaylistsForUser,
   fetchProfileByUsername,
   Profile,
+  ProfileUpdate,
+  updateProfile,
 } from "@/api/profiles";
 import { DiscoverPlaylist } from "@/api/playlists";
 import { useAuth } from "@/lib/auth";
@@ -20,8 +23,25 @@ const UserProfile = () => {
   const [playlists, setPlaylists] = useState<DiscoverPlaylist[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
 
   const isOwner = !!(user && profile && user.id === profile.id);
+
+  const handleSave = async (patch: ProfileUpdate) => {
+    if (!profile) return;
+    try {
+      const updated = await updateProfile(profile.id, patch);
+      setProfile(updated);
+      toast({ title: "Profile updated" });
+    } catch (err: any) {
+      toast({
+        title: "Couldn't save profile",
+        description: err.message,
+        variant: "destructive",
+      });
+      throw err;
+    }
+  };
 
   useEffect(() => {
     if (!username) return;
@@ -100,7 +120,7 @@ const UserProfile = () => {
             <header className="flex flex-col gap-8 border-b hairline pb-12 sm:flex-row sm:items-end sm:justify-between">
               <div className="flex gap-6">
                 <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-full border hairline bg-background/50 font-display text-4xl">
-                  {initials}
+                  {profile.avatar_emoji ?? initials}
                 </div>
                 <div className="space-y-3">
                   <p className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
@@ -115,27 +135,48 @@ const UserProfile = () => {
                       {profile.bio}
                     </p>
                   )}
-                  <p className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
-                    <Calendar className="h-3 w-3" />
-                    Joined{" "}
-                    {new Date(profile.created_at).toLocaleDateString(undefined, {
-                      month: "long",
-                      year: "numeric",
-                    })}
-                  </p>
+                  <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-xs uppercase tracking-widest text-muted-foreground">
+                    <p className="flex items-center gap-2">
+                      <Calendar className="h-3 w-3" />
+                      Joined{" "}
+                      {new Date(profile.created_at).toLocaleDateString(undefined, {
+                        month: "long",
+                        year: "numeric",
+                      })}
+                    </p>
+                    {profile.favorite_genre && (
+                      <p className="flex items-center gap-2">
+                        <Sparkles className="h-3 w-3" />
+                        Loves {profile.favorite_genre}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
-              <div className="text-right text-xs uppercase tracking-widest text-muted-foreground">
-                <div>
-                  {publicCount}{" "}
-                  {publicCount === 1 ? "public playlist" : "public playlists"}
-                </div>
-                {isOwner && playlists.length > publicCount && (
-                  <div className="mt-1 flex items-center justify-end gap-1 text-foreground/60">
-                    <Lock className="h-3 w-3" />
-                    {playlists.length - publicCount} private
-                  </div>
+              <div className="flex flex-col items-start gap-4 sm:items-end">
+                {isOwner && (
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="gap-2"
+                    onClick={() => setEditOpen(true)}
+                  >
+                    <Pencil className="h-3.5 w-3.5" />
+                    Edit profile
+                  </Button>
                 )}
+                <div className="text-left text-xs uppercase tracking-widest text-muted-foreground sm:text-right">
+                  <div>
+                    {publicCount}{" "}
+                    {publicCount === 1 ? "public playlist" : "public playlists"}
+                  </div>
+                  {isOwner && playlists.length > publicCount && (
+                    <div className="mt-1 flex items-center gap-1 text-foreground/60 sm:justify-end">
+                      <Lock className="h-3 w-3" />
+                      {playlists.length - publicCount} private
+                    </div>
+                  )}
+                </div>
               </div>
             </header>
 
@@ -162,6 +203,15 @@ const UserProfile = () => {
           </>
         )}
       </main>
+
+      {profile && isOwner && (
+        <EditProfileDialog
+          open={editOpen}
+          onOpenChange={setEditOpen}
+          profile={profile}
+          onSave={handleSave}
+        />
+      )}
     </div>
   );
 };
