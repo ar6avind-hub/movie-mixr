@@ -22,23 +22,6 @@ export type PlaylistMovie = {
 
 export async function searchMovies(query: string): Promise<TmdbMovie[]> {
   if (!query.trim()) return [];
-  const { data, error } = await supabase.functions.invoke("tmdb-search", {
-    method: "GET" as never, // GET with query string
-    // supabase-js doesn't support query strings on invoke directly,
-    // so we use a manual fetch path below.
-  } as never);
-
-  // Fallback to manual fetch (more reliable for query strings)
-  if (data || error) {
-    if (error) throw error;
-    return data?.results ?? [];
-  }
-  return [];
-}
-
-// Manual fetch — handles query strings cleanly.
-export async function searchMoviesFetch(query: string): Promise<TmdbMovie[]> {
-  if (!query.trim()) return [];
   const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
   const anon = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
   const url = `https://${projectId}.supabase.co/functions/v1/tmdb-search?q=${encodeURIComponent(
