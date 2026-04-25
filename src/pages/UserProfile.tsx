@@ -1,23 +1,27 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, AtSign, Calendar } from "lucide-react";
+import { ArrowLeft, AtSign, Calendar, Lock } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { DiscoverCard } from "@/components/DiscoverCard";
 import { Button } from "@/components/ui/button";
 import {
+  fetchPlaylistsForUser,
   fetchProfileByUsername,
-  fetchPublicPlaylistsForUser,
   Profile,
 } from "@/api/profiles";
 import { DiscoverPlaylist } from "@/api/playlists";
+import { useAuth } from "@/lib/auth";
 import { toast } from "@/hooks/use-toast";
 
 const UserProfile = () => {
   const { username } = useParams<{ username: string }>();
+  const { user } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [playlists, setPlaylists] = useState<DiscoverPlaylist[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+
+  const isOwner = !!(user && profile && user.id === profile.id);
 
   useEffect(() => {
     if (!username) return;
@@ -34,7 +38,8 @@ const UserProfile = () => {
           return;
         }
         setProfile(p);
-        const pls = await fetchPublicPlaylistsForUser(p.id);
+        const includePrivate = !!(user && user.id === p.id);
+        const pls = await fetchPlaylistsForUser(p.id, { includePrivate });
         if (!active) return;
         setPlaylists(pls);
       } catch (err: any) {
