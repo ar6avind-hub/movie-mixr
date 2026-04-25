@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { DiscoverPlaylist } from "@/api/playlists";
-import { Globe } from "lucide-react";
+import { Globe, Lock } from "lucide-react";
 
 /**
  * Compact playlist card used on Discover and Profile pages.
