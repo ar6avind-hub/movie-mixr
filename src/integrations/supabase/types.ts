@@ -63,6 +63,7 @@ export type Database = {
           cover_emoji: string | null
           created_at: string
           description: string | null
+          genre: string | null
           id: string
           is_public: boolean
           name: string
@@ -73,6 +74,7 @@ export type Database = {
           cover_emoji?: string | null
           created_at?: string
           description?: string | null
+          genre?: string | null
           id?: string
           is_public?: boolean
           name: string
@@ -83,6 +85,7 @@ export type Database = {
           cover_emoji?: string | null
           created_at?: string
           description?: string | null
+          genre?: string | null
           id?: string
           is_public?: boolean
           name?: string
