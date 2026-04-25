@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link } from "react-router-dom";
-import { Compass, Search, Globe } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Compass, Search } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
+import { DiscoverCard } from "@/components/DiscoverCard";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -150,55 +150,6 @@ const Discover = () => {
         </section>
       </main>
     </div>
-  );
-};
-
-const DiscoverCard = ({ playlist }: { playlist: DiscoverPlaylist }) => {
-  const owner = playlist.owner_display_name ?? "anonymous";
-  return (
-    <Link
-      to={`/playlist/${playlist.id}`}
-      className="group relative block overflow-hidden rounded-xl border hairline bg-card-gradient p-6 shadow-soft transition-smooth hover:-translate-y-0.5 hover:shadow-glow"
-    >
-      <div className="flex items-start justify-between">
-        <div className="flex h-16 w-16 items-center justify-center rounded-lg border hairline bg-background/50 text-3xl">
-          {playlist.cover_emoji ?? "🎬"}
-        </div>
-        {playlist.genre && (
-          <span className="rounded-full border hairline px-2.5 py-1 text-[10px] uppercase tracking-widest text-muted-foreground">
-            {playlist.genre}
-          </span>
-        )}
-      </div>
-
-      <div className="mt-6 space-y-1">
-        <h3 className="font-display text-2xl leading-tight tracking-tight text-balance">
-          {playlist.name}
-        </h3>
-        <p className="text-xs uppercase tracking-widest text-muted-foreground">
-          by <span className="text-foreground/70">{owner}</span>
-        </p>
-        {playlist.description && (
-          <p className="line-clamp-2 pt-2 text-sm text-muted-foreground">
-            {playlist.description}
-          </p>
-        )}
-      </div>
-
-      <div className="mt-6 flex items-center justify-between text-xs uppercase tracking-widest text-muted-foreground">
-        <span className="flex items-center gap-2">
-          <Globe className="h-3 w-3" />
-          {playlist.movie_count ?? 0}{" "}
-          {playlist.movie_count === 1 ? "film" : "films"}
-        </span>
-        <span>
-          {new Date(playlist.created_at).toLocaleDateString(undefined, {
-            month: "short",
-            day: "numeric",
-          })}
-        </span>
-      </div>
-    </Link>
   );
 };
 

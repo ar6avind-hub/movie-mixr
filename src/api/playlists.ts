@@ -15,12 +15,14 @@ export type Playlist = {
 
 export type PlaylistWithOwner = Playlist & {
   owner_display_name: string | null;
+  owner_username: string | null;
 };
 
 export type DiscoverSort = "newest" | "most_movies";
 
 export type DiscoverPlaylist = Playlist & {
   owner_display_name: string | null;
+  owner_username: string | null;
 };
 
 export async function fetchPlaylists(userId: string): Promise<Playlist[]> {
@@ -50,11 +52,15 @@ export async function fetchPlaylist(id: string): Promise<PlaylistWithOwner | nul
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("display_name")
+    .select("display_name, username")
     .eq("id", data.user_id)
     .maybeSingle();
 
-  return { ...(data as Playlist), owner_display_name: profile?.display_name ?? null };
+  return {
+    ...(data as Playlist),
+    owner_display_name: profile?.display_name ?? null,
+    owner_username: profile?.username ?? null,
+  };
 }
 
 export async function createPlaylist(input: {
@@ -116,20 +122,26 @@ export async function fetchPublicPlaylists(opts: {
     movie_count: p.playlist_movies?.[0]?.count ?? 0,
   })) as (Playlist & { movie_count: number })[];
 
-  // Fetch owner display names in one query.
+  // Fetch owner display names + usernames in one query.
   const ownerIds = Array.from(new Set(rows.map((r) => r.user_id)));
-  let ownerMap = new Map<string, string | null>();
+  let ownerMap = new Map<string, { display_name: string | null; username: string | null }>();
   if (ownerIds.length > 0) {
     const { data: profiles } = await supabase
       .from("profiles")
-      .select("id, display_name")
+      .select("id, display_name, username")
       .in("id", ownerIds);
-    ownerMap = new Map((profiles ?? []).map((p: any) => [p.id, p.display_name]));
+    ownerMap = new Map(
+      (profiles ?? []).map((p: any) => [
+        p.id,
+        { display_name: p.display_name, username: p.username },
+      ])
+    );
   }
 
   const enriched: DiscoverPlaylist[] = rows.map((r) => ({
     ...r,
-    owner_display_name: ownerMap.get(r.user_id) ?? null,
+    owner_display_name: ownerMap.get(r.user_id)?.display_name ?? null,
+    owner_username: ownerMap.get(r.user_id)?.username ?? null,
   }));
 
   if (opts.sort === "most_movies") {

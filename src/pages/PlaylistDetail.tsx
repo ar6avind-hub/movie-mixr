@@ -145,9 +145,18 @@ const PlaylistDetail = () => {
                   )}
                   <p className="text-xs uppercase tracking-widest text-muted-foreground">
                     by{" "}
-                    <span className="text-foreground/80">
-                      {playlist.owner_display_name ?? "anonymous"}
-                    </span>
+                    {playlist.owner_username ? (
+                      <Link
+                        to={`/user/${playlist.owner_username}`}
+                        className="text-foreground/80 underline-offset-4 transition-smooth hover:text-foreground hover:underline"
+                      >
+                        {playlist.owner_display_name ?? playlist.owner_username}
+                      </Link>
+                    ) : (
+                      <span className="text-foreground/80">
+                        {playlist.owner_display_name ?? "anonymous"}
+                      </span>
+                    )}
                     {" · "}
                     {movies.length} {movies.length === 1 ? "film" : "films"}
                   </p>
