@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
+import { GENRES } from "@/lib/genres";
 
 const EMOJIS = ["🎬", "🍿", "🎭", "🌙", "🔥", "💔", "🌌", "🗡️", "👁️", "🌹"];
 
@@ -24,6 +25,7 @@ export const CreatePlaylistDialog = ({
     description: string;
     cover_emoji: string;
     is_public: boolean;
+    genre: string | null;
   }) => Promise<void>;
 }) => {
   const [open, setOpen] = useState(false);
@@ -31,6 +33,7 @@ export const CreatePlaylistDialog = ({
   const [description, setDescription] = useState("");
   const [emoji, setEmoji] = useState("🎬");
   const [isPublic, setIsPublic] = useState(false);
+  const [genre, setGenre] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -43,11 +46,13 @@ export const CreatePlaylistDialog = ({
         description: description.trim(),
         cover_emoji: emoji,
         is_public: isPublic,
+        genre,
       });
       setName("");
       setDescription("");
       setEmoji("🎬");
       setIsPublic(false);
+      setGenre(null);
       setOpen(false);
     } finally {
       setSubmitting(false);
