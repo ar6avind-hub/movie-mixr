@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, AtSign, Calendar, Lock } from "lucide-react";
+import { ArrowLeft, AtSign, Calendar, Lock, Pencil, Sparkles } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { DiscoverCard } from "@/components/DiscoverCard";
 import { Button } from "@/components/ui/button";
+import { EditProfileDialog } from "@/components/EditProfileDialog";
 import {
   fetchPlaylistsForUser,
   fetchProfileByUsername,
   Profile,
+  ProfileUpdate,
+  updateProfile,
 } from "@/api/profiles";
 import { DiscoverPlaylist } from "@/api/playlists";
 import { useAuth } from "@/lib/auth";
