@@ -23,8 +23,25 @@ const UserProfile = () => {
   const [playlists, setPlaylists] = useState<DiscoverPlaylist[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [editOpen, setEditOpen] = useState(false);
 
   const isOwner = !!(user && profile && user.id === profile.id);
+
+  const handleSave = async (patch: ProfileUpdate) => {
+    if (!profile) return;
+    try {
+      const updated = await updateProfile(profile.id, patch);
+      setProfile(updated);
+      toast({ title: "Profile updated" });
+    } catch (err: any) {
+      toast({
+        title: "Couldn't save profile",
+        description: err.message,
+        variant: "destructive",
+      });
+      throw err;
+    }
+  };
 
   useEffect(() => {
     if (!username) return;
