@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { MovieCard } from "@/components/MovieCard";
 import { AddMovieDialog } from "@/components/AddMovieDialog";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { ShareButton } from "@/components/ShareButton";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import { fetchPlaylist, PlaylistWithOwner } from "@/api/playlists";
