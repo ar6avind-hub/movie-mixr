@@ -15,7 +15,10 @@ export const SiteHeader = () => {
           {user ? (
             <>
               <Button variant="ghost" size="sm" asChild>
-                <Link to="/dashboard">Dashboard</Link>
+                <Link to="/discover">Discover</Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild>
+                <Link to="/dashboard">Library</Link>
               </Button>
               <Button
                 variant="outline"

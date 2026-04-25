@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
+import { GENRES } from "@/lib/genres";
 
 const EMOJIS = ["🎬", "🍿", "🎭", "🌙", "🔥", "💔", "🌌", "🗡️", "👁️", "🌹"];
 
@@ -24,6 +25,7 @@ export const CreatePlaylistDialog = ({
     description: string;
     cover_emoji: string;
     is_public: boolean;
+    genre: string | null;
   }) => Promise<void>;
 }) => {
   const [open, setOpen] = useState(false);
@@ -31,6 +33,7 @@ export const CreatePlaylistDialog = ({
   const [description, setDescription] = useState("");
   const [emoji, setEmoji] = useState("🎬");
   const [isPublic, setIsPublic] = useState(false);
+  const [genre, setGenre] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -43,11 +46,13 @@ export const CreatePlaylistDialog = ({
         description: description.trim(),
         cover_emoji: emoji,
         is_public: isPublic,
+        genre,
       });
       setName("");
       setDescription("");
       setEmoji("🎬");
       setIsPublic(false);
+      setGenre(null);
       setOpen(false);
     } finally {
       setSubmitting(false);
@@ -104,6 +109,36 @@ export const CreatePlaylistDialog = ({
                   }`}
                 >
                   {e}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label>Genre</Label>
+            <div className="flex flex-wrap gap-1.5">
+              <button
+                type="button"
+                onClick={() => setGenre(null)}
+                className={`rounded-full border px-3 py-1 text-xs uppercase tracking-widest transition-smooth ${
+                  genre === null
+                    ? "border-foreground bg-foreground text-background"
+                    : "hairline text-muted-foreground hover:bg-accent"
+                }`}
+              >
+                None
+              </button>
+              {GENRES.map((g) => (
+                <button
+                  key={g}
+                  type="button"
+                  onClick={() => setGenre(g)}
+                  className={`rounded-full border px-3 py-1 text-xs uppercase tracking-widest transition-smooth ${
+                    genre === g
+                      ? "border-foreground bg-foreground text-background"
+                      : "hairline text-muted-foreground hover:bg-accent"
+                  }`}
+                >
+                  {g}
                 </button>
               ))}
             </div>

@@ -34,6 +34,7 @@ const Dashboard = () => {
     description: string;
     cover_emoji: string;
     is_public: boolean;
+    genre: string | null;
   }) => {
     if (!user) return;
     try {
@@ -43,6 +44,7 @@ const Dashboard = () => {
         description: data.description,
         cover_emoji: data.cover_emoji,
         is_public: data.is_public,
+        genre: data.genre,
       });
       setPlaylists((p) => [{ ...created, movie_count: 0 }, ...p]);
       toast({ title: "Playlist created" });
