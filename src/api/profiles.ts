@@ -23,16 +23,20 @@ export async function fetchProfileByUsername(
   return (data as Profile) ?? null;
 }
 
-export async function fetchPublicPlaylistsForUser(
-  userId: string
+export async function fetchPlaylistsForUser(
+  userId: string,
+  opts: { includePrivate?: boolean } = {}
 ): Promise<DiscoverPlaylist[]> {
-  const { data, error } = await supabase
+  let query = supabase
     .from("playlists")
     .select("*, playlist_movies(count)")
-    .eq("user_id", userId)
-    .eq("is_public", true)
-    .order("created_at", { ascending: false });
+    .eq("user_id", userId);
 
+  if (!opts.includePrivate) {
+    query = query.eq("is_public", true);
+  }
+
+  const { data, error } = await query.order("created_at", { ascending: false });
   if (error) throw error;
 
   return (data ?? []).map((p: any) => ({

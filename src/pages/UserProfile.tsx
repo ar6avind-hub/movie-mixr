@@ -1,23 +1,27 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, AtSign, Calendar } from "lucide-react";
+import { ArrowLeft, AtSign, Calendar, Lock } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { DiscoverCard } from "@/components/DiscoverCard";
 import { Button } from "@/components/ui/button";
 import {
+  fetchPlaylistsForUser,
   fetchProfileByUsername,
-  fetchPublicPlaylistsForUser,
   Profile,
 } from "@/api/profiles";
 import { DiscoverPlaylist } from "@/api/playlists";
+import { useAuth } from "@/lib/auth";
 import { toast } from "@/hooks/use-toast";
 
 const UserProfile = () => {
   const { username } = useParams<{ username: string }>();
+  const { user } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [playlists, setPlaylists] = useState<DiscoverPlaylist[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+
+  const isOwner = !!(user && profile && user.id === profile.id);
 
   useEffect(() => {
     if (!username) return;
@@ -34,7 +38,8 @@ const UserProfile = () => {
           return;
         }
         setProfile(p);
-        const pls = await fetchPublicPlaylistsForUser(p.id);
+        const includePrivate = !!(user && user.id === p.id);
+        const pls = await fetchPlaylistsForUser(p.id, { includePrivate });
         if (!active) return;
         setPlaylists(pls);
       } catch (err: any) {
@@ -51,7 +56,9 @@ const UserProfile = () => {
     return () => {
       active = false;
     };
-  }, [username]);
+  }, [username, user?.id]);
+
+  const publicCount = playlists.filter((p) => p.is_public).length;
 
   const initials = (profile?.display_name ?? profile?.username ?? "?")
     .trim()
@@ -119,8 +126,16 @@ const UserProfile = () => {
                 </div>
               </div>
               <div className="text-right text-xs uppercase tracking-widest text-muted-foreground">
-                {playlists.length}{" "}
-                {playlists.length === 1 ? "playlist" : "playlists"}
+                <div>
+                  {publicCount}{" "}
+                  {publicCount === 1 ? "public playlist" : "public playlists"}
+                </div>
+                {isOwner && playlists.length > publicCount && (
+                  <div className="mt-1 flex items-center justify-end gap-1 text-foreground/60">
+                    <Lock className="h-3 w-3" />
+                    {playlists.length - publicCount} private
+                  </div>
+                )}
               </div>
             </header>
 
@@ -128,11 +143,12 @@ const UserProfile = () => {
               {playlists.length === 0 ? (
                 <div className="flex flex-col items-center justify-center rounded-xl border border-dashed hairline bg-elevated/40 py-20 text-center">
                   <h2 className="font-display text-3xl tracking-tight">
-                    Nothing public yet
+                    {isOwner ? "No playlists yet" : "Nothing public yet"}
                   </h2>
                   <p className="mt-2 max-w-xs text-sm text-muted-foreground">
-                    {profile.display_name ?? profile.username} hasn't shared any
-                    playlists.
+                    {isOwner
+                      ? "Create your first playlist from your library."
+                      : `${profile.display_name ?? profile.username} hasn't shared any playlists.`}
                   </p>
                 </div>
               ) : (

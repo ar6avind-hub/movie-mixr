@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { DiscoverPlaylist } from "@/api/playlists";
-import { Globe } from "lucide-react";
+import { Globe, Lock } from "lucide-react";
 
 /**
  * Compact playlist card used on Discover and Profile pages.
@@ -28,15 +28,22 @@ export const DiscoverCard = ({
       to={`/playlist/${playlist.id}`}
       className="group relative block overflow-hidden rounded-xl border hairline bg-card-gradient p-6 shadow-soft transition-smooth hover:-translate-y-0.5 hover:shadow-glow"
     >
-      <div className="flex items-start justify-between">
+      <div className="flex items-start justify-between gap-2">
         <div className="flex h-16 w-16 items-center justify-center rounded-lg border hairline bg-background/50 text-3xl">
           {playlist.cover_emoji ?? "🎬"}
         </div>
-        {playlist.genre && (
-          <span className="rounded-full border hairline px-2.5 py-1 text-[10px] uppercase tracking-widest text-muted-foreground">
-            {playlist.genre}
-          </span>
-        )}
+        <div className="flex flex-wrap items-center justify-end gap-1.5">
+          {!playlist.is_public && (
+            <span className="flex items-center gap-1 rounded-full border hairline bg-background/60 px-2.5 py-1 text-[10px] uppercase tracking-widest text-muted-foreground">
+              <Lock className="h-3 w-3" /> Private
+            </span>
+          )}
+          {playlist.genre && (
+            <span className="rounded-full border hairline px-2.5 py-1 text-[10px] uppercase tracking-widest text-muted-foreground">
+              {playlist.genre}
+            </span>
+          )}
+        </div>
       </div>
 
       <div className="mt-6 space-y-1">
