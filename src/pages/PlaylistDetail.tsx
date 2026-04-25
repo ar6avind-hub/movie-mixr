@@ -165,7 +165,13 @@ const PlaylistDetail = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                {playlist.is_public && (
+                  <ShareButton
+                    title={playlist.name}
+                    description={playlist.description}
+                  />
+                )}
                 {!isOwner && (
                   <FavoriteButton
                     playlistId={playlist.id}
