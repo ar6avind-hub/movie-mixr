@@ -143,11 +143,12 @@ const UserProfile = () => {
               {playlists.length === 0 ? (
                 <div className="flex flex-col items-center justify-center rounded-xl border border-dashed hairline bg-elevated/40 py-20 text-center">
                   <h2 className="font-display text-3xl tracking-tight">
-                    Nothing public yet
+                    {isOwner ? "No playlists yet" : "Nothing public yet"}
                   </h2>
                   <p className="mt-2 max-w-xs text-sm text-muted-foreground">
-                    {profile.display_name ?? profile.username} hasn't shared any
-                    playlists.
+                    {isOwner
+                      ? "Create your first playlist from your library."
+                      : `${profile.display_name ?? profile.username} hasn't shared any playlists.`}
                   </p>
                 </div>
               ) : (
