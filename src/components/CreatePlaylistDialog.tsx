@@ -19,12 +19,18 @@ const EMOJIS = ["🎬", "🍿", "🎭", "🌙", "🔥", "💔", "🌌", "🗡️
 export const CreatePlaylistDialog = ({
   onCreate,
 }: {
-  onCreate: (data: { name: string; description: string; cover_emoji: string }) => Promise<void>;
+  onCreate: (data: {
+    name: string;
+    description: string;
+    cover_emoji: string;
+    is_public: boolean;
+  }) => Promise<void>;
 }) => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [emoji, setEmoji] = useState("🎬");
+  const [isPublic, setIsPublic] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,10 +38,16 @@ export const CreatePlaylistDialog = ({
     if (!name.trim()) return;
     setSubmitting(true);
     try {
-      await onCreate({ name: name.trim(), description: description.trim(), cover_emoji: emoji });
+      await onCreate({
+        name: name.trim(),
+        description: description.trim(),
+        cover_emoji: emoji,
+        is_public: isPublic,
+      });
       setName("");
       setDescription("");
       setEmoji("🎬");
+      setIsPublic(false);
       setOpen(false);
     } finally {
       setSubmitting(false);
