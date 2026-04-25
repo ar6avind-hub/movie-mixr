@@ -6,6 +6,8 @@ export type Profile = {
   username: string;
   display_name: string | null;
   bio: string | null;
+  favorite_genre: string | null;
+  avatar_emoji: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -45,4 +47,26 @@ export async function fetchPlaylistsForUser(
     owner_display_name: null,
     owner_username: null,
   })) as DiscoverPlaylist[];
+}
+
+export type ProfileUpdate = {
+  display_name?: string | null;
+  bio?: string | null;
+  favorite_genre?: string | null;
+  avatar_emoji?: string | null;
+};
+
+export async function updateProfile(
+  userId: string,
+  patch: ProfileUpdate
+): Promise<Profile> {
+  const { data, error } = await supabase
+    .from("profiles")
+    .update(patch)
+    .eq("id", userId)
+    .select("*")
+    .single();
+
+  if (error) throw error;
+  return data as Profile;
 }
