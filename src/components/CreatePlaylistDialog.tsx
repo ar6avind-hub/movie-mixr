@@ -108,6 +108,23 @@ export const CreatePlaylistDialog = ({
               ))}
             </div>
           </div>
+          <div className="flex items-center justify-between rounded-md border hairline bg-background/50 px-3 py-2.5">
+            <div className="space-y-0.5">
+              <Label htmlFor="public" className="cursor-pointer">
+                Make public
+              </Label>
+              <p className="text-xs text-muted-foreground">
+                Anyone with the link can view.
+              </p>
+            </div>
+            <input
+              id="public"
+              type="checkbox"
+              checked={isPublic}
+              onChange={(e) => setIsPublic(e.target.checked)}
+              className="h-4 w-4 cursor-pointer accent-foreground"
+            />
+          </div>
           <DialogFooter>
             <Button type="submit" disabled={submitting || !name.trim()} className="w-full">
               {submitting ? "Creating…" : "Create playlist"}
