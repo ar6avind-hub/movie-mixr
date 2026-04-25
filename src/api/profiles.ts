@@ -38,6 +38,7 @@ export async function fetchPublicPlaylistsForUser(
   return (data ?? []).map((p: any) => ({
     ...p,
     movie_count: p.playlist_movies?.[0]?.count ?? 0,
-    owner_display_name: null, // not needed on profile page (we already have the owner)
+    owner_display_name: null,
+    owner_username: null,
   })) as DiscoverPlaylist[];
 }

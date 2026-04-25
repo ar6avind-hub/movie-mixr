@@ -1,21 +1,27 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DiscoverPlaylist } from "@/api/playlists";
 import { Globe } from "lucide-react";
 
 /**
  * Compact playlist card used on Discover and Profile pages.
- * Owner is optional — hidden on profile pages where it's redundant.
+ * Owner name links to that user's profile when a username is provided.
  */
 export const DiscoverCard = ({
   playlist,
   showOwner = true,
-  ownerUsername,
 }: {
   playlist: DiscoverPlaylist;
   showOwner?: boolean;
-  ownerUsername?: string | null;
 }) => {
-  const owner = playlist.owner_display_name ?? "anonymous";
+  const navigate = useNavigate();
+  const owner = playlist.owner_display_name ?? playlist.owner_username ?? "anonymous";
+
+  const handleOwnerClick = (e: React.MouseEvent) => {
+    if (!playlist.owner_username) return;
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/user/${playlist.owner_username}`);
+  };
 
   return (
     <Link
@@ -40,17 +46,14 @@ export const DiscoverCard = ({
         {showOwner && (
           <p className="text-xs uppercase tracking-widest text-muted-foreground">
             by{" "}
-            {ownerUsername ? (
-              <span
-                className="text-foreground/70 transition-smooth hover:text-foreground"
-                onClick={(e) => {
-                  e.preventDefault();
-                  // Navigate to profile without triggering the outer Link.
-                  window.location.assign(`/user/${ownerUsername}`);
-                }}
+            {playlist.owner_username ? (
+              <button
+                type="button"
+                onClick={handleOwnerClick}
+                className="text-foreground/70 underline-offset-4 transition-smooth hover:text-foreground hover:underline"
               >
                 {owner}
-              </span>
+              </button>
             ) : (
               <span className="text-foreground/70">{owner}</span>
             )}
