@@ -4,6 +4,7 @@ import { ArrowLeft, Globe, Lock } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { MovieCard } from "@/components/MovieCard";
 import { AddMovieDialog } from "@/components/AddMovieDialog";
+import { FavoriteButton } from "@/components/FavoriteButton";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import { fetchPlaylist, PlaylistWithOwner } from "@/api/playlists";
@@ -163,7 +164,16 @@ const PlaylistDetail = () => {
                 </div>
               </div>
 
-              {isOwner && <AddMovieDialog onAdd={handleAdd} />}
+              <div className="flex items-center gap-2">
+                {!isOwner && (
+                  <FavoriteButton
+                    playlistId={playlist.id}
+                    ownerId={playlist.user_id}
+                    isPublic={playlist.is_public}
+                  />
+                )}
+                {isOwner && <AddMovieDialog onAdd={handleAdd} />}
+              </div>
             </header>
 
             <section className="mt-10">

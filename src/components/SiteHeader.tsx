@@ -18,6 +18,9 @@ export const SiteHeader = () => {
                 <Link to="/discover">Discover</Link>
               </Button>
               <Button variant="ghost" size="sm" asChild>
+                <Link to="/favorites">Favorites</Link>
+              </Button>
+              <Button variant="ghost" size="sm" asChild>
                 <Link to="/dashboard">Library</Link>
               </Button>
               <Button
