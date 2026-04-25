@@ -96,25 +96,28 @@ export type Database = {
       }
       profiles: {
         Row: {
+          bio: string | null
           created_at: string
           display_name: string | null
           id: string
           updated_at: string
-          username: string | null
+          username: string
         }
         Insert: {
+          bio?: string | null
           created_at?: string
           display_name?: string | null
           id: string
           updated_at?: string
-          username?: string | null
+          username: string
         }
         Update: {
+          bio?: string | null
           created_at?: string
           display_name?: string | null
           id?: string
           updated_at?: string
-          username?: string | null
+          username?: string
         }
         Relationships: []
       }
@@ -123,7 +126,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      slugify_username: { Args: { input: string }; Returns: string }
     }
     Enums: {
       [_ in never]: never
