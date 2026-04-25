@@ -29,7 +29,12 @@ const Dashboard = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  const handleCreate = async (data: { name: string; description: string; cover_emoji: string }) => {
+  const handleCreate = async (data: {
+    name: string;
+    description: string;
+    cover_emoji: string;
+    is_public: boolean;
+  }) => {
     if (!user) return;
     try {
       const created = await createPlaylist({
@@ -37,6 +42,7 @@ const Dashboard = () => {
         name: data.name,
         description: data.description,
         cover_emoji: data.cover_emoji,
+        is_public: data.is_public,
       });
       setPlaylists((p) => [{ ...created, movie_count: 0 }, ...p]);
       toast({ title: "Playlist created" });

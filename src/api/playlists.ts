@@ -6,9 +6,14 @@ export type Playlist = {
   name: string;
   description: string | null;
   cover_emoji: string | null;
+  is_public: boolean;
   created_at: string;
   updated_at: string;
   movie_count?: number;
+};
+
+export type PlaylistWithOwner = Playlist & {
+  owner_display_name: string | null;
 };
 
 export async function fetchPlaylists(userId: string): Promise<Playlist[]> {
@@ -26,11 +31,31 @@ export async function fetchPlaylists(userId: string): Promise<Playlist[]> {
   }));
 }
 
+export async function fetchPlaylist(id: string): Promise<PlaylistWithOwner | null> {
+  const { data, error } = await supabase
+    .from("playlists")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) throw error;
+  if (!data) return null;
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("display_name")
+    .eq("id", data.user_id)
+    .maybeSingle();
+
+  return { ...(data as Playlist), owner_display_name: profile?.display_name ?? null };
+}
+
 export async function createPlaylist(input: {
   user_id: string;
   name: string;
   description?: string;
   cover_emoji?: string;
+  is_public?: boolean;
 }): Promise<Playlist> {
   const { data, error } = await supabase
     .from("playlists")
@@ -39,6 +64,7 @@ export async function createPlaylist(input: {
       name: input.name,
       description: input.description ?? null,
       cover_emoji: input.cover_emoji ?? "🎬",
+      is_public: input.is_public ?? false,
     })
     .select()
     .single();

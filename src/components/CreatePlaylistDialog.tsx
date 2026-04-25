@@ -19,12 +19,18 @@ const EMOJIS = ["🎬", "🍿", "🎭", "🌙", "🔥", "💔", "🌌", "🗡️
 export const CreatePlaylistDialog = ({
   onCreate,
 }: {
-  onCreate: (data: { name: string; description: string; cover_emoji: string }) => Promise<void>;
+  onCreate: (data: {
+    name: string;
+    description: string;
+    cover_emoji: string;
+    is_public: boolean;
+  }) => Promise<void>;
 }) => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [emoji, setEmoji] = useState("🎬");
+  const [isPublic, setIsPublic] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -32,10 +38,16 @@ export const CreatePlaylistDialog = ({
     if (!name.trim()) return;
     setSubmitting(true);
     try {
-      await onCreate({ name: name.trim(), description: description.trim(), cover_emoji: emoji });
+      await onCreate({
+        name: name.trim(),
+        description: description.trim(),
+        cover_emoji: emoji,
+        is_public: isPublic,
+      });
       setName("");
       setDescription("");
       setEmoji("🎬");
+      setIsPublic(false);
       setOpen(false);
     } finally {
       setSubmitting(false);
@@ -95,6 +107,23 @@ export const CreatePlaylistDialog = ({
                 </button>
               ))}
             </div>
+          </div>
+          <div className="flex items-center justify-between rounded-md border hairline bg-background/50 px-3 py-2.5">
+            <div className="space-y-0.5">
+              <Label htmlFor="public" className="cursor-pointer">
+                Make public
+              </Label>
+              <p className="text-xs text-muted-foreground">
+                Anyone with the link can view.
+              </p>
+            </div>
+            <input
+              id="public"
+              type="checkbox"
+              checked={isPublic}
+              onChange={(e) => setIsPublic(e.target.checked)}
+              className="h-4 w-4 cursor-pointer accent-foreground"
+            />
           </div>
           <DialogFooter>
             <Button type="submit" disabled={submitting || !name.trim()} className="w-full">
