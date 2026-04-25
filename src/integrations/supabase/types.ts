@@ -18,28 +18,34 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          note: string | null
           playlist_id: string
           position: number
           poster_url: string | null
           title: string
+          tmdb_id: number | null
           year: number | null
         }
         Insert: {
           created_at?: string
           id?: string
+          note?: string | null
           playlist_id: string
           position?: number
           poster_url?: string | null
           title: string
+          tmdb_id?: number | null
           year?: number | null
         }
         Update: {
           created_at?: string
           id?: string
+          note?: string | null
           playlist_id?: string
           position?: number
           poster_url?: string | null
           title?: string
+          tmdb_id?: number | null
           year?: number | null
         }
         Relationships: [
@@ -58,6 +64,7 @@ export type Database = {
           created_at: string
           description: string | null
           id: string
+          is_public: boolean
           name: string
           updated_at: string
           user_id: string
@@ -67,6 +74,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          is_public?: boolean
           name: string
           updated_at?: string
           user_id: string
@@ -76,6 +84,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           id?: string
+          is_public?: boolean
           name?: string
           updated_at?: string
           user_id?: string
