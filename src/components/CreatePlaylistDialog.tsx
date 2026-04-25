@@ -113,6 +113,36 @@ export const CreatePlaylistDialog = ({
               ))}
             </div>
           </div>
+          <div className="space-y-2">
+            <Label>Genre</Label>
+            <div className="flex flex-wrap gap-1.5">
+              <button
+                type="button"
+                onClick={() => setGenre(null)}
+                className={`rounded-full border px-3 py-1 text-xs uppercase tracking-widest transition-smooth ${
+                  genre === null
+                    ? "border-foreground bg-foreground text-background"
+                    : "hairline text-muted-foreground hover:bg-accent"
+                }`}
+              >
+                None
+              </button>
+              {GENRES.map((g) => (
+                <button
+                  key={g}
+                  type="button"
+                  onClick={() => setGenre(g)}
+                  className={`rounded-full border px-3 py-1 text-xs uppercase tracking-widest transition-smooth ${
+                    genre === g
+                      ? "border-foreground bg-foreground text-background"
+                      : "hairline text-muted-foreground hover:bg-accent"
+                  }`}
+                >
+                  {g}
+                </button>
+              ))}
+            </div>
+          </div>
           <div className="flex items-center justify-between rounded-md border hairline bg-background/50 px-3 py-2.5">
             <div className="space-y-0.5">
               <Label htmlFor="public" className="cursor-pointer">
