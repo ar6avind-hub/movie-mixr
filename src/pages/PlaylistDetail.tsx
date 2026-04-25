@@ -5,6 +5,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { MovieCard } from "@/components/MovieCard";
 import { AddMovieDialog } from "@/components/AddMovieDialog";
 import { FavoriteButton } from "@/components/FavoriteButton";
+import { ShareButton } from "@/components/ShareButton";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import { fetchPlaylist, PlaylistWithOwner } from "@/api/playlists";
@@ -164,7 +165,13 @@ const PlaylistDetail = () => {
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                {playlist.is_public && (
+                  <ShareButton
+                    title={playlist.name}
+                    description={playlist.description}
+                  />
+                )}
                 {!isOwner && (
                   <FavoriteButton
                     playlistId={playlist.id}
