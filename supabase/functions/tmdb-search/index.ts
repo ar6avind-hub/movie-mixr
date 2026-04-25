@@ -1,5 +1,9 @@
 // TMDb movie search proxy — keeps the API token server-side.
-import { corsHeaders } from "../_shared/cors.ts";
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
+};
 
 const TMDB_API_KEY = Deno.env.get("TMDB_API_KEY");
 
