@@ -12,6 +12,7 @@ import Dashboard from "./pages/Dashboard";
 import PlaylistDetail from "./pages/PlaylistDetail";
 import Discover from "./pages/Discover";
 import UserProfile from "./pages/UserProfile";
+import Favorites from "./pages/Favorites";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -40,6 +41,14 @@ const App = () => (
               element={
                 <ProtectedRoute>
                   <Discover />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/favorites"
+              element={
+                <ProtectedRoute>
+                  <Favorites />
                 </ProtectedRoute>
               }
             />
