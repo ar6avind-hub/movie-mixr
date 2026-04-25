@@ -96,25 +96,31 @@ export type Database = {
       }
       profiles: {
         Row: {
+          avatar_emoji: string | null
           bio: string | null
           created_at: string
           display_name: string | null
+          favorite_genre: string | null
           id: string
           updated_at: string
           username: string
         }
         Insert: {
+          avatar_emoji?: string | null
           bio?: string | null
           created_at?: string
           display_name?: string | null
+          favorite_genre?: string | null
           id: string
           updated_at?: string
           username: string
         }
         Update: {
+          avatar_emoji?: string | null
           bio?: string | null
           created_at?: string
           display_name?: string | null
+          favorite_genre?: string | null
           id?: string
           updated_at?: string
           username?: string
