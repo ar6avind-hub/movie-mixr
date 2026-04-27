@@ -49,6 +49,17 @@ const PlaylistDetail = () => {
         const m = await fetchPlaylistMovies(id);
         if (!active) return;
         setMovies(m);
+
+        // Fire-and-forget view tracking. Server enforces dedupe + public-only.
+        if (p.is_public) {
+          const viewerKey = getViewerKey(user?.id ?? null);
+          recordPlaylistView(p.id, viewerKey).then((next) => {
+            if (!active || next == null) return;
+            setPlaylist((cur) =>
+              cur ? { ...cur, view_count: next } : cur
+            );
+          });
+        }
       } catch (err: any) {
         toast({
           title: "Couldn't load playlist",
@@ -63,7 +74,8 @@ const PlaylistDetail = () => {
     return () => {
       active = false;
     };
-  }, [id]);
+    // user?.id is intentionally a dep so re-records correctly after sign-in
+  }, [id, user?.id]);
 
   const handleAdd = async (movie: TmdbMovie, note: string) => {
     if (!playlist) return;
