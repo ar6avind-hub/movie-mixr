@@ -67,9 +67,9 @@ export const CreatePlaylistDialog = ({
           New playlist
         </Button>
       </DialogTrigger>
-      <DialogContent className="border-hairline bg-elevated sm:max-w-md">
+      <DialogContent className="max-h-[92vh] overflow-y-auto border-hairline bg-elevated sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="font-display text-3xl">New playlist</DialogTitle>
+          <DialogTitle className="font-display text-2xl sm:text-3xl">New playlist</DialogTitle>
           <DialogDescription>Curate a collection of films worth remembering.</DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-5">
