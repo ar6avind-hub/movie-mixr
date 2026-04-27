@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Globe, Lock } from "lucide-react";
+import { ArrowLeft, Eye, Globe, Lock } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { MovieCard } from "@/components/MovieCard";
 import { AddMovieDialog } from "@/components/AddMovieDialog";
@@ -8,7 +8,11 @@ import { FavoriteButton } from "@/components/FavoriteButton";
 import { ShareButton } from "@/components/ShareButton";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
-import { fetchPlaylist, PlaylistWithOwner } from "@/api/playlists";
+import {
+  fetchPlaylist,
+  PlaylistWithOwner,
+  recordPlaylistView,
+} from "@/api/playlists";
 import {
   addMovieToPlaylist,
   fetchPlaylistMovies,
@@ -16,6 +20,7 @@ import {
   removeMovieFromPlaylist,
   TmdbMovie,
 } from "@/api/movies";
+import { getViewerKey } from "@/lib/viewer";
 import { toast } from "@/hooks/use-toast";
 
 const PlaylistDetail = () => {
