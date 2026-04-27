@@ -12,8 +12,8 @@ export const MovieCard = ({
   onRemove?: (id: string) => void;
 }) => {
   return (
-    <article className="group relative flex gap-5 rounded-xl border hairline bg-card-gradient p-5 shadow-soft transition-smooth hover:-translate-y-0.5 hover:shadow-glow">
-      <div className="h-32 w-22 shrink-0 overflow-hidden rounded-md bg-elevated sm:h-40 sm:w-28">
+    <article className="group relative flex gap-4 rounded-xl border hairline bg-card-gradient p-4 shadow-soft transition-smooth hover:-translate-y-0.5 hover:shadow-glow sm:gap-5 sm:p-5">
+      <div className="h-28 w-20 shrink-0 overflow-hidden rounded-md bg-elevated sm:h-40 sm:w-28">
         {movie.poster_url ? (
           <img
             src={movie.poster_url}
@@ -29,12 +29,12 @@ export const MovieCard = ({
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start justify-between gap-2 sm:gap-3">
           <div className="min-w-0">
-            <h3 className="font-display text-2xl leading-tight tracking-tight text-balance">
+            <h3 className="font-display text-xl leading-tight tracking-tight text-balance sm:text-2xl">
               {movie.title}
             </h3>
-            <p className="mt-1 text-xs uppercase tracking-widest text-muted-foreground">
+            <p className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
               {movie.year ?? "—"}
             </p>
           </div>
@@ -42,7 +42,8 @@ export const MovieCard = ({
             <Button
               variant="ghost"
               size="icon"
-              className="opacity-0 transition-smooth group-hover:opacity-100"
+              /* Always tappable on touch — only fades on hover for mouse users */
+              className="h-9 w-9 shrink-0 sm:opacity-0 sm:transition-smooth sm:group-hover:opacity-100"
               onClick={() => onRemove(movie.id)}
               aria-label="Remove film"
             >
@@ -52,7 +53,7 @@ export const MovieCard = ({
         </div>
 
         {movie.note && (
-          <blockquote className="mt-4 border-l-2 hairline pl-4 text-sm italic text-muted-foreground">
+          <blockquote className="mt-3 border-l-2 hairline pl-3 text-xs italic text-muted-foreground sm:mt-4 sm:pl-4 sm:text-sm">
             "{movie.note}"
           </blockquote>
         )}

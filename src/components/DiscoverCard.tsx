@@ -26,32 +26,32 @@ export const DiscoverCard = ({
   return (
     <Link
       to={`/playlist/${playlist.id}`}
-      className="group relative block overflow-hidden rounded-xl border hairline bg-card-gradient p-6 shadow-soft transition-smooth hover:-translate-y-0.5 hover:shadow-glow"
+      className="group relative block overflow-hidden rounded-xl border hairline bg-card-gradient p-5 shadow-soft transition-smooth hover:-translate-y-0.5 hover:shadow-glow active:scale-[0.99] sm:p-6"
     >
       <div className="flex items-start justify-between gap-2">
-        <div className="flex h-16 w-16 items-center justify-center rounded-lg border hairline bg-background/50 text-3xl">
+        <div className="flex h-14 w-14 items-center justify-center rounded-lg border hairline bg-background/50 text-2xl sm:h-16 sm:w-16 sm:text-3xl">
           {playlist.cover_emoji ?? "🎬"}
         </div>
         <div className="flex flex-wrap items-center justify-end gap-1.5">
           {!playlist.is_public && (
-            <span className="flex items-center gap-1 rounded-full border hairline bg-background/60 px-2.5 py-1 text-[10px] uppercase tracking-widest text-muted-foreground">
+            <span className="flex items-center gap-1 rounded-full border hairline bg-background/60 px-2 py-0.5 text-[10px] uppercase tracking-widest text-muted-foreground sm:px-2.5 sm:py-1">
               <Lock className="h-3 w-3" /> Private
             </span>
           )}
           {playlist.genre && (
-            <span className="rounded-full border hairline px-2.5 py-1 text-[10px] uppercase tracking-widest text-muted-foreground">
+            <span className="rounded-full border hairline px-2 py-0.5 text-[10px] uppercase tracking-widest text-muted-foreground sm:px-2.5 sm:py-1">
               {playlist.genre}
             </span>
           )}
         </div>
       </div>
 
-      <div className="mt-6 space-y-1">
-        <h3 className="font-display text-2xl leading-tight tracking-tight text-balance">
+      <div className="mt-5 space-y-1 sm:mt-6">
+        <h3 className="font-display text-xl leading-tight tracking-tight text-balance sm:text-2xl">
           {playlist.name}
         </h3>
         {showOwner && (
-          <p className="text-xs uppercase tracking-widest text-muted-foreground">
+          <p className="text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
             by{" "}
             {playlist.owner_username ? (
               <button
@@ -73,7 +73,7 @@ export const DiscoverCard = ({
         )}
       </div>
 
-      <div className="mt-6 flex items-center justify-between text-xs uppercase tracking-widest text-muted-foreground">
+      <div className="mt-5 flex items-center justify-between gap-3 text-[10px] uppercase tracking-widest text-muted-foreground sm:mt-6 sm:text-xs">
         <span className="flex items-center gap-2">
           <Globe className="h-3 w-3" />
           {playlist.movie_count ?? 0}{" "}

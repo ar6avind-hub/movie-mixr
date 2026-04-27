@@ -74,13 +74,13 @@ const Dashboard = () => {
     <div className="relative min-h-screen">
       <SiteHeader />
 
-      <main className="container py-12 sm:py-16">
-        <div className="flex flex-col gap-6 border-b hairline pb-12 sm:flex-row sm:items-end sm:justify-between">
+      <main className="container py-8 sm:py-16">
+        <div className="flex flex-col gap-6 border-b hairline pb-8 sm:pb-12 sm:flex-row sm:items-end sm:justify-between">
           <div className="space-y-3">
-            <p className="text-xs uppercase tracking-widest text-muted-foreground">
+            <p className="text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
               Your library
             </p>
-            <h1 className="font-display text-5xl tracking-tight sm:text-6xl">
+            <h1 className="font-display text-4xl tracking-tight sm:text-6xl">
               Hello, <span className="italic">{greeting}</span>
             </h1>
             <p className="text-sm text-muted-foreground">
@@ -92,26 +92,26 @@ const Dashboard = () => {
           <CreatePlaylistDialog onCreate={handleCreate} />
         </div>
 
-        <section className="mt-12">
+        <section className="mt-8 sm:mt-12">
           {loading ? (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {Array.from({ length: 3 }).map((_, i) => (
                 <div
                   key={i}
-                  className="h-56 animate-pulse rounded-xl border hairline bg-elevated"
+                  className="h-48 skeleton rounded-xl border hairline sm:h-56"
                 />
               ))}
             </div>
           ) : playlists.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed hairline bg-elevated/40 py-24 text-center">
+            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed hairline bg-elevated/40 px-6 py-16 text-center sm:py-24">
               <Film className="h-8 w-8 text-muted-foreground" strokeWidth={1.25} />
-              <h2 className="mt-6 font-display text-3xl tracking-tight">An empty shelf</h2>
+              <h2 className="mt-6 font-display text-2xl tracking-tight sm:text-3xl">An empty shelf</h2>
               <p className="mt-2 max-w-xs text-sm text-muted-foreground">
                 Create your first playlist to start collecting the films you love.
               </p>
             </div>
           ) : (
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {playlists.map((p) => (
                 <PlaylistCard key={p.id} playlist={p} onDelete={handleDelete} />
               ))}

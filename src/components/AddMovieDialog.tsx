@@ -101,9 +101,9 @@ export const AddMovieDialog = ({
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-2xl border-hairline bg-card">
+      <DialogContent className="max-h-[92vh] max-w-2xl overflow-y-auto border-hairline bg-card">
         <DialogHeader>
-          <DialogTitle className="font-display text-3xl tracking-tight">
+          <DialogTitle className="font-display text-2xl tracking-tight sm:text-3xl">
             {step === "search" ? "Find a film" : "Why this one?"}
           </DialogTitle>
         </DialogHeader>
@@ -228,15 +228,16 @@ export const AddMovieDialog = ({
               />
             </div>
 
-            <div className="flex justify-end gap-2">
+            <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
               <Button
                 variant="outline"
                 onClick={() => setStep("search")}
                 disabled={saving}
+                className="w-full sm:w-auto"
               >
                 Back
               </Button>
-              <Button onClick={handleSave} disabled={saving}>
+              <Button onClick={handleSave} disabled={saving} className="w-full sm:w-auto">
                 {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : "Add to playlist"}
               </Button>
             </div>

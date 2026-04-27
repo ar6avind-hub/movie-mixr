@@ -92,8 +92,8 @@ const PlaylistDetail = () => {
     <div className="relative min-h-screen">
       <SiteHeader />
 
-      <main className="container py-12 sm:py-16">
-        <Button variant="ghost" size="sm" asChild className="mb-8 -ml-3 gap-2">
+      <main className="container py-8 sm:py-16">
+        <Button variant="ghost" size="sm" asChild className="mb-6 -ml-2 gap-2 sm:mb-8 sm:-ml-3">
           <Link to={user ? "/dashboard" : "/"}>
             <ArrowLeft className="h-4 w-4" /> Back
           </Link>
@@ -101,32 +101,32 @@ const PlaylistDetail = () => {
 
         {loading ? (
           <div className="space-y-8">
-            <div className="h-40 animate-pulse rounded-xl border hairline bg-elevated" />
+            <div className="h-40 skeleton rounded-xl border hairline" />
             <div className="grid gap-4">
               {Array.from({ length: 3 }).map((_, i) => (
                 <div
                   key={i}
-                  className="h-40 animate-pulse rounded-xl border hairline bg-elevated"
+                  className="h-40 skeleton rounded-xl border hairline"
                 />
               ))}
             </div>
           </div>
         ) : notFound || !playlist ? (
-          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed hairline bg-elevated/40 py-24 text-center">
-            <h2 className="font-display text-3xl tracking-tight">Not here</h2>
+          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed hairline bg-elevated/40 px-6 py-16 text-center sm:py-24">
+            <h2 className="font-display text-2xl tracking-tight sm:text-3xl">Not here</h2>
             <p className="mt-2 max-w-xs text-sm text-muted-foreground">
               This playlist doesn't exist or isn't shared.
             </p>
           </div>
         ) : (
           <>
-            <header className="flex flex-col gap-8 border-b hairline pb-12 sm:flex-row sm:items-end sm:justify-between">
-              <div className="flex gap-6">
-                <div className="flex h-24 w-24 shrink-0 items-center justify-center rounded-xl border hairline bg-background/50 text-5xl">
+            <header className="flex flex-col gap-6 border-b hairline pb-8 sm:gap-8 sm:pb-12 sm:flex-row sm:items-end sm:justify-between">
+              <div className="flex gap-4 sm:gap-6">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-xl border hairline bg-background/50 text-3xl sm:h-24 sm:w-24 sm:text-5xl">
                   {playlist.cover_emoji ?? "🎬"}
                 </div>
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-muted-foreground">
+                <div className="min-w-0 space-y-2 sm:space-y-3">
+                  <div className="flex items-center gap-2 text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
                     {playlist.is_public ? (
                       <>
                         <Globe className="h-3 w-3" /> Public playlist
@@ -137,7 +137,7 @@ const PlaylistDetail = () => {
                       </>
                     )}
                   </div>
-                  <h1 className="font-display text-5xl leading-none tracking-tight sm:text-6xl">
+                  <h1 className="font-display text-3xl leading-tight tracking-tight text-balance sm:text-6xl sm:leading-none">
                     {playlist.name}
                   </h1>
                   {playlist.description && (
@@ -145,7 +145,7 @@ const PlaylistDetail = () => {
                       {playlist.description}
                     </p>
                   )}
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground">
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
                     by{" "}
                     {playlist.owner_username ? (
                       <Link
@@ -183,10 +183,10 @@ const PlaylistDetail = () => {
               </div>
             </header>
 
-            <section className="mt-10">
+            <section className="mt-8 sm:mt-10">
               {movies.length === 0 ? (
-                <div className="flex flex-col items-center justify-center rounded-xl border border-dashed hairline bg-elevated/40 py-20 text-center">
-                  <h2 className="font-display text-3xl tracking-tight">
+                <div className="flex flex-col items-center justify-center rounded-xl border border-dashed hairline bg-elevated/40 px-6 py-16 text-center sm:py-20">
+                  <h2 className="font-display text-2xl tracking-tight sm:text-3xl">
                     No films yet
                   </h2>
                   <p className="mt-2 max-w-xs text-sm text-muted-foreground">
@@ -196,7 +196,7 @@ const PlaylistDetail = () => {
                   </p>
                 </div>
               ) : (
-                <div className="grid gap-4">
+                <div className="grid gap-3 sm:gap-4">
                   {movies.map((m) => (
                     <MovieCard
                       key={m.id}

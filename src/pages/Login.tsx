@@ -34,14 +34,14 @@ const Login = () => {
         style={{ background: "var(--gradient-spot)" }}
       />
       <div className="container flex min-h-screen flex-col">
-        <div className="py-8">
+        <div className="py-6 sm:py-8">
           <Logo />
         </div>
 
-        <div className="flex flex-1 items-center justify-center pb-20">
-          <div className="w-full max-w-sm space-y-10 animate-fade-up">
+        <div className="flex flex-1 items-center justify-center pb-16 sm:pb-20">
+          <div className="w-full max-w-sm space-y-8 animate-fade-up sm:space-y-10">
             <div className="space-y-3 text-center">
-              <h1 className="font-display text-5xl tracking-tight">Welcome back</h1>
+              <h1 className="font-display text-4xl tracking-tight sm:text-5xl">Welcome back</h1>
               <p className="text-sm text-muted-foreground">
                 Sign in to your library.
               </p>
@@ -57,6 +57,8 @@ const Login = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
+                  inputMode="email"
+                  className="h-11"
                 />
               </div>
               <div className="space-y-2">
@@ -68,6 +70,7 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   autoComplete="current-password"
+                  className="h-11"
                 />
               </div>
               <Button type="submit" className="w-full" size="lg" disabled={loading}>

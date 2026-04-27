@@ -116,4 +116,28 @@
   .transition-smooth {
     transition: var(--transition-smooth);
   }
+  /* Subtle shimmer skeleton — replaces flat pulse with a softer light sweep */
+  .skeleton {
+    position: relative;
+    overflow: hidden;
+    background: hsl(var(--surface-elevated));
+  }
+  .skeleton::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(0 0% 100% / 0.04),
+      transparent
+    );
+    animation: shimmer 1.8s ease-in-out infinite;
+  }
+  /* Larger tap targets on touch devices without bloating mouse UI */
+  @media (hover: none) and (pointer: coarse) {
+    .tap-safe {
+      min-height: 44px;
+    }
+  }
 }
