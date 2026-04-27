@@ -162,8 +162,8 @@ const PlaylistDetail = () => {
                       {playlist.description}
                     </p>
                   )}
-                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
-                    by{" "}
+                  <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
+                    <span>by</span>
                     {playlist.owner_username ? (
                       <Link
                         to={`/user/${playlist.owner_username}`}
@@ -176,8 +176,27 @@ const PlaylistDetail = () => {
                         {playlist.owner_display_name ?? "anonymous"}
                       </span>
                     )}
-                    {" · "}
-                    {movies.length} {movies.length === 1 ? "film" : "films"}
+                    <span aria-hidden>·</span>
+                    <span>
+                      {movies.length} {movies.length === 1 ? "film" : "films"}
+                    </span>
+                    {playlist.is_public && (
+                      <>
+                        <span aria-hidden>·</span>
+                        <span
+                          className="inline-flex items-center gap-1.5"
+                          title={`${playlist.view_count.toLocaleString()} ${
+                            playlist.view_count === 1 ? "view" : "views"
+                          }`}
+                        >
+                          <Eye className="h-3 w-3" />
+                          {playlist.view_count.toLocaleString()}
+                          <span className="sr-only">
+                            {playlist.view_count === 1 ? "view" : "views"}
+                          </span>
+                        </span>
+                      </>
+                    )}
                   </p>
                 </div>
               </div>
