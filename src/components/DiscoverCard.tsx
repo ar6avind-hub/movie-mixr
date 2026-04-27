@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { DiscoverPlaylist } from "@/api/playlists";
-import { Globe, Lock } from "lucide-react";
+import { Eye, Globe, Lock } from "lucide-react";
 
 /**
  * Compact playlist card used on Discover and Profile pages.
@@ -79,11 +79,24 @@ export const DiscoverCard = ({
           {playlist.movie_count ?? 0}{" "}
           {playlist.movie_count === 1 ? "film" : "films"}
         </span>
-        <span>
-          {new Date(playlist.created_at).toLocaleDateString(undefined, {
-            month: "short",
-            day: "numeric",
-          })}
+        <span className="flex items-center gap-3">
+          {playlist.is_public && playlist.view_count > 0 && (
+            <span
+              className="flex items-center gap-1.5"
+              title={`${playlist.view_count.toLocaleString()} ${
+                playlist.view_count === 1 ? "view" : "views"
+              }`}
+            >
+              <Eye className="h-3 w-3" />
+              {playlist.view_count.toLocaleString()}
+            </span>
+          )}
+          <span>
+            {new Date(playlist.created_at).toLocaleDateString(undefined, {
+              month: "short",
+              day: "numeric",
+            })}
+          </span>
         </span>
       </div>
     </Link>
