@@ -8,10 +8,34 @@ export type Playlist = {
   cover_emoji: string | null;
   is_public: boolean;
   genre: string | null;
+  view_count: number;
   created_at: string;
   updated_at: string;
   movie_count?: number;
 };
+
+/**
+ * Record a view for a public playlist. Server-side dedupes so rapid repeat
+ * views from the same viewer (within 30 minutes) are ignored.
+ *
+ * `viewerKey` should be the auth user id when signed in, otherwise a stable
+ * per-browser session id.
+ */
+export async function recordPlaylistView(
+  playlistId: string,
+  viewerKey: string
+): Promise<number | null> {
+  const { data, error } = await supabase.rpc("record_playlist_view", {
+    _playlist_id: playlistId,
+    _viewer_key: viewerKey,
+  });
+  if (error) {
+    // Non-fatal — view tracking should never break the page
+    console.warn("record_playlist_view failed", error);
+    return null;
+  }
+  return (data as number | null) ?? null;
+}
 
 export type PlaylistWithOwner = Playlist & {
   owner_display_name: string | null;
