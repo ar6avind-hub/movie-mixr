@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { Playlist } from "@/api/playlists";
-import { Trash2, Globe } from "lucide-react";
+import { Trash2, Globe, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export const PlaylistCard = ({
@@ -50,11 +50,24 @@ export const PlaylistCard = ({
           {playlist.is_public && <Globe className="h-3 w-3" />}
           {playlist.movie_count ?? 0} {playlist.movie_count === 1 ? "film" : "films"}
         </span>
-        <span>
-          {new Date(playlist.created_at).toLocaleDateString(undefined, {
-            month: "short",
-            day: "numeric",
-          })}
+        <span className="flex items-center gap-3">
+          {playlist.is_public && playlist.view_count > 0 && (
+            <span
+              className="flex items-center gap-1.5"
+              title={`${playlist.view_count.toLocaleString()} ${
+                playlist.view_count === 1 ? "view" : "views"
+              }`}
+            >
+              <Eye className="h-3 w-3" />
+              {playlist.view_count.toLocaleString()}
+            </span>
+          )}
+          <span>
+            {new Date(playlist.created_at).toLocaleDateString(undefined, {
+              month: "short",
+              day: "numeric",
+            })}
+          </span>
         </span>
       </div>
     </Link>

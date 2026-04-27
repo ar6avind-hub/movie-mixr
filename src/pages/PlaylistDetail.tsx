@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Globe, Lock } from "lucide-react";
+import { ArrowLeft, Eye, Globe, Lock } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { MovieCard } from "@/components/MovieCard";
 import { AddMovieDialog } from "@/components/AddMovieDialog";
@@ -8,7 +8,11 @@ import { FavoriteButton } from "@/components/FavoriteButton";
 import { ShareButton } from "@/components/ShareButton";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
-import { fetchPlaylist, PlaylistWithOwner } from "@/api/playlists";
+import {
+  fetchPlaylist,
+  PlaylistWithOwner,
+  recordPlaylistView,
+} from "@/api/playlists";
 import {
   addMovieToPlaylist,
   fetchPlaylistMovies,
@@ -16,6 +20,7 @@ import {
   removeMovieFromPlaylist,
   TmdbMovie,
 } from "@/api/movies";
+import { getViewerKey } from "@/lib/viewer";
 import { toast } from "@/hooks/use-toast";
 
 const PlaylistDetail = () => {
@@ -44,6 +49,17 @@ const PlaylistDetail = () => {
         const m = await fetchPlaylistMovies(id);
         if (!active) return;
         setMovies(m);
+
+        // Fire-and-forget view tracking. Server enforces dedupe + public-only.
+        if (p.is_public) {
+          const viewerKey = getViewerKey(user?.id ?? null);
+          recordPlaylistView(p.id, viewerKey).then((next) => {
+            if (!active || next == null) return;
+            setPlaylist((cur) =>
+              cur ? { ...cur, view_count: next } : cur
+            );
+          });
+        }
       } catch (err: any) {
         toast({
           title: "Couldn't load playlist",
@@ -58,7 +74,8 @@ const PlaylistDetail = () => {
     return () => {
       active = false;
     };
-  }, [id]);
+    // user?.id is intentionally a dep so re-records correctly after sign-in
+  }, [id, user?.id]);
 
   const handleAdd = async (movie: TmdbMovie, note: string) => {
     if (!playlist) return;
@@ -145,8 +162,8 @@ const PlaylistDetail = () => {
                       {playlist.description}
                     </p>
                   )}
-                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
-                    by{" "}
+                  <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
+                    <span>by</span>
                     {playlist.owner_username ? (
                       <Link
                         to={`/user/${playlist.owner_username}`}
@@ -159,8 +176,27 @@ const PlaylistDetail = () => {
                         {playlist.owner_display_name ?? "anonymous"}
                       </span>
                     )}
-                    {" · "}
-                    {movies.length} {movies.length === 1 ? "film" : "films"}
+                    <span aria-hidden>·</span>
+                    <span>
+                      {movies.length} {movies.length === 1 ? "film" : "films"}
+                    </span>
+                    {playlist.is_public && (
+                      <>
+                        <span aria-hidden>·</span>
+                        <span
+                          className="inline-flex items-center gap-1.5"
+                          title={`${playlist.view_count.toLocaleString()} ${
+                            playlist.view_count === 1 ? "view" : "views"
+                          }`}
+                        >
+                          <Eye className="h-3 w-3" />
+                          {playlist.view_count.toLocaleString()}
+                          <span className="sr-only">
+                            {playlist.view_count === 1 ? "view" : "views"}
+                          </span>
+                        </span>
+                      </>
+                    )}
                   </p>
                 </div>
               </div>
