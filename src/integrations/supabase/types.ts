@@ -87,6 +87,27 @@ export type Database = {
           },
         ]
       }
+      playlist_views: {
+        Row: {
+          created_at: string
+          id: string
+          playlist_id: string
+          viewer_key: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          playlist_id: string
+          viewer_key: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          playlist_id?: string
+          viewer_key?: string
+        }
+        Relationships: []
+      }
       playlists: {
         Row: {
           cover_emoji: string | null
@@ -98,6 +119,7 @@ export type Database = {
           name: string
           updated_at: string
           user_id: string
+          view_count: number
         }
         Insert: {
           cover_emoji?: string | null
@@ -109,6 +131,7 @@ export type Database = {
           name: string
           updated_at?: string
           user_id: string
+          view_count?: number
         }
         Update: {
           cover_emoji?: string | null
@@ -120,6 +143,7 @@ export type Database = {
           name?: string
           updated_at?: string
           user_id?: string
+          view_count?: number
         }
         Relationships: []
       }
@@ -161,6 +185,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      record_playlist_view: {
+        Args: { _playlist_id: string; _viewer_key: string }
+        Returns: number
+      }
       slugify_username: { Args: { input: string }; Returns: string }
     }
     Enums: {
