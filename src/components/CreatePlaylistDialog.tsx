@@ -14,11 +14,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { GENRES } from "@/lib/genres";
+import { ReactNode } from "react";
 
 const EMOJIS = ["🎬", "🍿", "🎭", "🌙", "🔥", "💔", "🌌", "🗡️", "👁️", "🌹"];
 
 export const CreatePlaylistDialog = ({
   onCreate,
+  trigger,
 }: {
   onCreate: (data: {
     name: string;
@@ -27,6 +29,7 @@ export const CreatePlaylistDialog = ({
     is_public: boolean;
     genre: string | null;
   }) => Promise<void>;
+  trigger?: ReactNode;
 }) => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
@@ -62,10 +65,12 @@ export const CreatePlaylistDialog = ({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="lg" className="w-full gap-2 sm:w-auto">
-          <Plus className="h-4 w-4" />
-          New playlist
-        </Button>
+        {trigger ?? (
+          <Button size="lg" className="w-full gap-2 sm:w-auto">
+            <Plus className="h-4 w-4" />
+            New playlist
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="max-h-[92vh] overflow-y-auto border-hairline bg-elevated sm:max-w-md">
         <DialogHeader>

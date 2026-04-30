@@ -78,16 +78,19 @@ const Favorites = () => {
               ))}
             </div>
           ) : playlists.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed hairline bg-elevated/40 px-6 py-16 text-center sm:py-24">
-              <Heart className="mb-4 h-6 w-6 text-muted-foreground" />
-              <h2 className="font-display text-2xl tracking-tight sm:text-3xl">
+            <div className="flex flex-col items-center rounded-xl border border-dashed hairline bg-elevated/40 px-6 py-16 text-center sm:py-24">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full border hairline bg-background/50">
+                <Heart className="h-6 w-6 text-muted-foreground" strokeWidth={1.25} />
+              </div>
+              <h2 className="mt-6 font-display text-2xl tracking-tight sm:text-3xl">
                 Nothing saved yet
               </h2>
-              <p className="mt-2 max-w-xs text-sm text-muted-foreground">
-                Save public playlists from Discover to keep them close.
+              <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+                Wander through Discover and tap the heart on any playlist to keep it
+                close. Your collection lives here.
               </p>
-              <Button asChild variant="outline" size="sm" className="mt-6">
-                <Link to="/discover">Browse discover</Link>
+              <Button asChild size="lg" className="mt-7">
+                <Link to="/discover">Explore Discover</Link>
               </Button>
             </div>
           ) : (

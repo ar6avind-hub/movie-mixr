@@ -5,7 +5,14 @@ import { PlaylistCard } from "@/components/PlaylistCard";
 import { CreatePlaylistDialog } from "@/components/CreatePlaylistDialog";
 import { createPlaylist, deletePlaylist, fetchPlaylists, Playlist } from "@/api/playlists";
 import { toast } from "@/hooks/use-toast";
-import { Film } from "lucide-react";
+import { Film, Plus, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const EXAMPLE_IDEAS = [
+  { emoji: "🌙", title: "Late night noir", hint: "Rain-soaked streets, smoke & shadow" },
+  { emoji: "🍿", title: "Comfort rewatches", hint: "Films you return to like an old friend" },
+  { emoji: "🌌", title: "Mind-benders", hint: "Stories that stay with you for weeks" },
+];
 
 const Dashboard = () => {
   const { user } = useAuth();
@@ -103,12 +110,48 @@ const Dashboard = () => {
               ))}
             </div>
           ) : playlists.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed hairline bg-elevated/40 px-6 py-16 text-center sm:py-24">
-              <Film className="h-8 w-8 text-muted-foreground" strokeWidth={1.25} />
-              <h2 className="mt-6 font-display text-2xl tracking-tight sm:text-3xl">An empty shelf</h2>
-              <p className="mt-2 max-w-xs text-sm text-muted-foreground">
-                Create your first playlist to start collecting the films you love.
+            <div className="flex flex-col items-center rounded-xl border border-dashed hairline bg-elevated/40 px-6 py-14 text-center sm:py-20">
+              <div className="flex h-14 w-14 items-center justify-center rounded-full border hairline bg-background/50">
+                <Film className="h-6 w-6 text-muted-foreground" strokeWidth={1.25} />
+              </div>
+              <h2 className="mt-6 font-display text-2xl tracking-tight sm:text-3xl">
+                An empty shelf
+              </h2>
+              <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+                Every great library starts with one film. Create your first playlist
+                and begin gathering the stories you love.
               </p>
+
+              <CreatePlaylistDialog
+                onCreate={handleCreate}
+                trigger={
+                  <Button size="lg" className="mt-7 gap-2">
+                    <Plus className="h-4 w-4" />
+                    Create your first playlist
+                  </Button>
+                }
+              />
+
+              <div className="mt-10 w-full max-w-2xl">
+                <p className="flex items-center justify-center gap-2 text-[10px] uppercase tracking-widest text-muted-foreground sm:text-xs">
+                  <Sparkles className="h-3 w-3" />
+                  A few ideas to begin
+                </p>
+                <ul className="mt-4 grid gap-3 sm:grid-cols-3">
+                  {EXAMPLE_IDEAS.map((idea) => (
+                    <li
+                      key={idea.title}
+                      className="rounded-lg border hairline bg-background/40 p-4 text-left transition-smooth hover:bg-background/60"
+                    >
+                      <div className="text-2xl">{idea.emoji}</div>
+                      <div className="mt-2 text-sm font-medium">{idea.title}</div>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {idea.hint}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           ) : (
             <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
