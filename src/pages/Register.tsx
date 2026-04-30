@@ -18,15 +18,21 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const trimmedName = displayName.trim();
+    const trimmedEmail = email.trim();
+    if (!trimmedName) {
+      toast({ title: "Add your name", description: "We'll use it to greet you.", variant: "destructive" });
+      return;
+    }
     if (password.length < 6) {
       toast({ title: "Password too short", description: "Use at least 6 characters.", variant: "destructive" });
       return;
     }
     setLoading(true);
-    const { error } = await signUp(email, password, displayName);
+    const { error } = await signUp(trimmedEmail, password, trimmedName);
     setLoading(false);
     if (error) {
-      toast({ title: "Couldn't create account", description: error, variant: "destructive" });
+      toast({ title: "Couldn't create account", description: friendlyAuthError(error), variant: "destructive" });
       return;
     }
     toast({ title: "Welcome to CINEBLEND", description: "Your library is ready." });
