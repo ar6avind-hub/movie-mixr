@@ -17,11 +17,16 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    const trimmedEmail = email.trim();
+    if (!trimmedEmail || !password) {
+      toast({ title: "Missing details", description: "Enter your email and password.", variant: "destructive" });
+      return;
+    }
     setLoading(true);
-    const { error } = await signIn(email, password);
+    const { error } = await signIn(trimmedEmail, password);
     setLoading(false);
     if (error) {
-      toast({ title: "Couldn't sign in", description: error, variant: "destructive" });
+      toast({ title: "Couldn't sign in", description: friendlyAuthError(error), variant: "destructive" });
       return;
     }
     navigate("/dashboard");
