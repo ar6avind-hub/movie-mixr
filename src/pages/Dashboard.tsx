@@ -5,7 +5,14 @@ import { PlaylistCard } from "@/components/PlaylistCard";
 import { CreatePlaylistDialog } from "@/components/CreatePlaylistDialog";
 import { createPlaylist, deletePlaylist, fetchPlaylists, Playlist } from "@/api/playlists";
 import { toast } from "@/hooks/use-toast";
-import { Film } from "lucide-react";
+import { Film, Plus, Sparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+const EXAMPLE_IDEAS = [
+  { emoji: "🌙", title: "Late night noir", hint: "Rain-soaked streets, smoke & shadow" },
+  { emoji: "🍿", title: "Comfort rewatches", hint: "Films you return to like an old friend" },
+  { emoji: "🌌", title: "Mind-benders", hint: "Stories that stay with you for weeks" },
+];
 
 const Dashboard = () => {
   const { user } = useAuth();
