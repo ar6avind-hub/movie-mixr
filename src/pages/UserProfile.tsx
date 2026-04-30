@@ -182,15 +182,23 @@ const UserProfile = () => {
 
             <section className="mt-8 sm:mt-10">
               {playlists.length === 0 ? (
-                <div className="flex flex-col items-center justify-center rounded-xl border border-dashed hairline bg-elevated/40 px-6 py-16 text-center sm:py-20">
-                  <h2 className="font-display text-2xl tracking-tight sm:text-3xl">
+                <div className="flex flex-col items-center rounded-xl border border-dashed hairline bg-elevated/40 px-6 py-16 text-center sm:py-20">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full border hairline bg-background/50">
+                    <Film className="h-6 w-6 text-muted-foreground" strokeWidth={1.25} />
+                  </div>
+                  <h2 className="mt-6 font-display text-2xl tracking-tight sm:text-3xl">
                     {isOwner ? "No playlists yet" : "Nothing public yet"}
                   </h2>
-                  <p className="mt-2 max-w-xs text-sm text-muted-foreground">
+                  <p className="mt-2 max-w-sm text-sm text-muted-foreground">
                     {isOwner
-                      ? "Create your first playlist from your library."
-                      : `${profile.display_name ?? profile.username} hasn't shared any playlists.`}
+                      ? "Your library is waiting. Create a playlist to share your taste with the world."
+                      : `${profile.display_name ?? profile.username} hasn't shared any playlists. Check back soon.`}
                   </p>
+                  {isOwner && (
+                    <Button asChild size="lg" className="mt-7">
+                      <Link to="/dashboard">Go to your library</Link>
+                    </Button>
+                  )}
                 </div>
               ) : (
                 <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
