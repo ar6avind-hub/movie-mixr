@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Compass, Search } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
+import { Button } from "@/components/ui/button";
 import { DiscoverCard } from "@/components/DiscoverCard";
 import { Input } from "@/components/ui/input";
 import {
