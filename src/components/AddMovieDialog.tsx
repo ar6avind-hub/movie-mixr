@@ -73,21 +73,35 @@ export const AddMovieDialog = ({
   };
 
   const handleSelect = (movie: TmdbMovie) => {
+    if (existingSet.has(movie.tmdb_id)) {
+      toast({
+        title: "Already in this playlist",
+        description: `${movie.title} is already on the list.`,
+      });
+      return;
+    }
     setSelected(movie);
     setStep("note");
   };
 
   const handleSave = async () => {
     if (!selected) return;
+    if (existingSet.has(selected.tmdb_id)) {
+      toast({
+        title: "Already in this playlist",
+        description: `${selected.title} is already on the list.`,
+      });
+      return;
+    }
     setSaving(true);
     try {
       await onAdd(selected, note);
       setOpen(false);
       reset();
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast({
         title: "Couldn't add film",
-        description: err.message,
+        description: friendlyError(err, "We couldn't save that film. Try again."),
         variant: "destructive",
       });
     } finally {
