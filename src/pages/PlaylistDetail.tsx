@@ -106,6 +106,25 @@ const PlaylistDetail = () => {
     }
   };
 
+  const shareable = !!(playlist && playlist.is_public);
+  useDocumentMeta(
+    shareable
+      ? {
+          title: `${playlist!.name} — CINEBLEND`,
+          description:
+            playlist!.description?.trim() ||
+            `A film playlist on CINEBLEND${
+              playlist!.owner_display_name || playlist!.owner_username
+                ? ` by ${playlist!.owner_display_name ?? playlist!.owner_username}`
+                : ""
+            }.`,
+          image: emojiToOgImage(playlist!.cover_emoji ?? "🎬"),
+          url: typeof window !== "undefined" ? window.location.href : undefined,
+          type: "article",
+        }
+      : {},
+  );
+
   return (
     <div className="relative min-h-screen">
       <SiteHeader />
