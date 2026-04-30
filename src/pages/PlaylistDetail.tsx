@@ -242,7 +242,12 @@ const PlaylistDetail = () => {
                     isPublic={playlist.is_public}
                   />
                 )}
-                {isOwner && <AddMovieDialog onAdd={handleAdd} />}
+                {isOwner && (
+                  <AddMovieDialog
+                    onAdd={handleAdd}
+                    existingTmdbIds={movies.map((m) => m.tmdb_id)}
+                  />
+                )}
               </div>
             </header>
 
