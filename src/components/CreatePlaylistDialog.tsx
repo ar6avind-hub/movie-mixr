@@ -41,11 +41,12 @@ export const CreatePlaylistDialog = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) return;
+    const trimmedName = name.trim();
+    if (!trimmedName) return;
     setSubmitting(true);
     try {
       await onCreate({
-        name: name.trim(),
+        name: trimmedName,
         description: description.trim(),
         cover_emoji: emoji,
         is_public: isPublic,
