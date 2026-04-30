@@ -131,18 +131,40 @@ const Discover = () => {
               ))}
             </div>
           ) : empty ? (
-            <div className="flex flex-col items-center justify-center rounded-xl border border-dashed hairline bg-elevated/40 px-6 py-16 text-center sm:py-24">
-              <Compass
-                className="h-8 w-8 text-muted-foreground"
-                strokeWidth={1.25}
-              />
-              <h2 className="mt-6 font-display text-2xl tracking-tight sm:text-3xl">
-                Nothing here yet
-              </h2>
-              <p className="mt-2 max-w-xs text-sm text-muted-foreground">
-                Try a different search, or be the first to share a public playlist.
-              </p>
-            </div>
+            (() => {
+              const hasFilters =
+                debouncedSearch.trim() !== "" || genre !== "all" || sort !== "newest";
+              const resetFilters = () => {
+                setSearch("");
+                setGenre("all");
+                setSort("newest");
+              };
+              return (
+                <div className="flex flex-col items-center rounded-xl border border-dashed hairline bg-elevated/40 px-6 py-16 text-center sm:py-24">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-full border hairline bg-background/50">
+                    <Compass className="h-6 w-6 text-muted-foreground" strokeWidth={1.25} />
+                  </div>
+                  <h2 className="mt-6 font-display text-2xl tracking-tight sm:text-3xl">
+                    {hasFilters ? "No matches" : "Nothing here yet"}
+                  </h2>
+                  <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+                    {hasFilters
+                      ? "We couldn't find playlists for those filters. Try widening your search."
+                      : "Be the first to share a public playlist with the community."}
+                  </p>
+                  {hasFilters && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="mt-6"
+                      onClick={resetFilters}
+                    >
+                      Reset filters
+                    </Button>
+                  )}
+                </div>
+              );
+            })()
           ) : (
             <div className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {playlists.map((p) => (
