@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, AtSign, Calendar, Lock, Pencil, Sparkles } from "lucide-react";
+import { ArrowLeft, AtSign, Calendar, Film, Lock, Pencil, Sparkles } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { DiscoverCard } from "@/components/DiscoverCard";
 import { Button } from "@/components/ui/button";
