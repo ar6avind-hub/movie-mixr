@@ -32,6 +32,11 @@ export const AddMovieDialog = ({
   const [note, setNote] = useState("");
   const [saving, setSaving] = useState(false);
 
+  const existingSet = useMemo(
+    () => new Set(existingTmdbIds.filter((x): x is number => typeof x === "number")),
+    [existingTmdbIds]
+  );
+
   // Debounced search
   useEffect(() => {
     if (!open) return;
@@ -45,10 +50,10 @@ export const AddMovieDialog = ({
       try {
         const data = await searchMovies(trimmed);
         setResults(data);
-      } catch (err: any) {
+      } catch (err: unknown) {
         toast({
-          title: "Search failed",
-          description: err.message,
+          title: "Search trouble",
+          description: friendlyError(err, "We couldn't reach the film database. Try again."),
           variant: "destructive",
         });
       } finally {
