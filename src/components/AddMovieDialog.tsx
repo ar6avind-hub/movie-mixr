@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Plus, Search, Loader2, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Plus, Search, Loader2, X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,13 +12,16 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { searchMovies, TmdbMovie } from "@/api/movies";
 import { toast } from "@/hooks/use-toast";
+import { friendlyError } from "@/lib/errors";
 
 type Step = "search" | "note";
 
 export const AddMovieDialog = ({
   onAdd,
+  existingTmdbIds = [],
 }: {
   onAdd: (movie: TmdbMovie, note: string) => Promise<void>;
+  existingTmdbIds?: Array<number | null>;
 }) => {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<Step>("search");
