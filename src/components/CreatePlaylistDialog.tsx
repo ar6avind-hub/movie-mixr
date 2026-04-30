@@ -14,11 +14,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
 import { GENRES } from "@/lib/genres";
+import { ReactNode } from "react";
 
 const EMOJIS = ["🎬", "🍿", "🎭", "🌙", "🔥", "💔", "🌌", "🗡️", "👁️", "🌹"];
 
 export const CreatePlaylistDialog = ({
   onCreate,
+  trigger,
 }: {
   onCreate: (data: {
     name: string;
@@ -27,6 +29,7 @@ export const CreatePlaylistDialog = ({
     is_public: boolean;
     genre: string | null;
   }) => Promise<void>;
+  trigger?: ReactNode;
 }) => {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
