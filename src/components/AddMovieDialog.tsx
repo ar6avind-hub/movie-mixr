@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Plus, Search, Loader2, X } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Plus, Search, Loader2, X, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,13 +12,16 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { searchMovies, TmdbMovie } from "@/api/movies";
 import { toast } from "@/hooks/use-toast";
+import { friendlyError } from "@/lib/errors";
 
 type Step = "search" | "note";
 
 export const AddMovieDialog = ({
   onAdd,
+  existingTmdbIds = [],
 }: {
   onAdd: (movie: TmdbMovie, note: string) => Promise<void>;
+  existingTmdbIds?: Array<number | null>;
 }) => {
   const [open, setOpen] = useState(false);
   const [step, setStep] = useState<Step>("search");
@@ -28,6 +31,11 @@ export const AddMovieDialog = ({
   const [selected, setSelected] = useState<TmdbMovie | null>(null);
   const [note, setNote] = useState("");
   const [saving, setSaving] = useState(false);
+
+  const existingSet = useMemo(
+    () => new Set(existingTmdbIds.filter((x): x is number => typeof x === "number")),
+    [existingTmdbIds]
+  );
 
   // Debounced search
   useEffect(() => {
@@ -42,10 +50,10 @@ export const AddMovieDialog = ({
       try {
         const data = await searchMovies(trimmed);
         setResults(data);
-      } catch (err: any) {
+      } catch (err: unknown) {
         toast({
-          title: "Search failed",
-          description: err.message,
+          title: "Search trouble",
+          description: friendlyError(err, "We couldn't reach the film database. Try again."),
           variant: "destructive",
         });
       } finally {
@@ -65,21 +73,35 @@ export const AddMovieDialog = ({
   };
 
   const handleSelect = (movie: TmdbMovie) => {
+    if (existingSet.has(movie.tmdb_id)) {
+      toast({
+        title: "Already in this playlist",
+        description: `${movie.title} is already on the list.`,
+      });
+      return;
+    }
     setSelected(movie);
     setStep("note");
   };
 
   const handleSave = async () => {
     if (!selected) return;
+    if (existingSet.has(selected.tmdb_id)) {
+      toast({
+        title: "Already in this playlist",
+        description: `${selected.title} is already on the list.`,
+      });
+      return;
+    }
     setSaving(true);
     try {
       await onAdd(selected, note);
       setOpen(false);
       reset();
-    } catch (err: any) {
+    } catch (err: unknown) {
       toast({
         title: "Couldn't add film",
-        description: err.message,
+        description: friendlyError(err, "We couldn't save that film. Try again."),
         variant: "destructive",
       });
     } finally {
@@ -140,37 +162,54 @@ export const AddMovieDialog = ({
                 </p>
               )}
 
-              {results.map((m) => (
-                <button
-                  key={m.tmdb_id}
-                  onClick={() => handleSelect(m)}
-                  className="flex w-full items-start gap-4 rounded-lg border border-transparent p-3 text-left transition-smooth hover:border-hairline hover:bg-elevated"
-                >
-                  <div className="h-20 w-14 shrink-0 overflow-hidden rounded-md bg-elevated">
-                    {m.poster_url ? (
-                      <img
-                        src={m.poster_url}
-                        alt={`${m.title} poster`}
-                        className="h-full w-full object-cover"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">
-                        —
+              {results.map((m) => {
+                const already = existingSet.has(m.tmdb_id);
+                return (
+                  <button
+                    key={m.tmdb_id}
+                    type="button"
+                    onClick={() => handleSelect(m)}
+                    disabled={already}
+                    aria-disabled={already}
+                    className={`flex w-full items-start gap-4 rounded-lg border border-transparent p-3 text-left transition-smooth ${
+                      already
+                        ? "cursor-not-allowed opacity-60"
+                        : "cursor-pointer hover:border-hairline hover:bg-elevated"
+                    }`}
+                  >
+                    <div className="h-20 w-14 shrink-0 overflow-hidden rounded-md bg-elevated">
+                      {m.poster_url ? (
+                        <img
+                          src={m.poster_url}
+                          alt={`${m.title} poster`}
+                          className="h-full w-full object-cover"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-xs text-muted-foreground">
+                          —
+                        </div>
+                      )}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <h4 className="truncate font-medium">{m.title}</h4>
+                        {already && (
+                          <span className="inline-flex shrink-0 items-center gap-1 rounded-full border hairline px-2 py-0.5 text-[10px] uppercase tracking-widest text-muted-foreground">
+                            <Check className="h-3 w-3" /> Added
+                          </span>
+                        )}
                       </div>
-                    )}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h4 className="truncate font-medium">{m.title}</h4>
-                    <p className="text-xs uppercase tracking-widest text-muted-foreground">
-                      {m.year ?? "—"}
-                    </p>
-                    <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
-                      {m.overview}
-                    </p>
-                  </div>
-                </button>
-              ))}
+                      <p className="text-xs uppercase tracking-widest text-muted-foreground">
+                        {m.year ?? "—"}
+                      </p>
+                      <p className="mt-1 line-clamp-2 text-xs text-muted-foreground">
+                        {m.overview}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
         ) : (

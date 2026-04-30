@@ -80,6 +80,13 @@ const PlaylistDetail = () => {
 
   const handleAdd = async (movie: TmdbMovie, note: string) => {
     if (!playlist) return;
+    if (movies.some((m) => m.tmdb_id === movie.tmdb_id)) {
+      toast({
+        title: "Already in this playlist",
+        description: `${movie.title} is already on the list.`,
+      });
+      return;
+    }
     const created = await addMovieToPlaylist({
       playlist_id: playlist.id,
       movie,
@@ -235,7 +242,12 @@ const PlaylistDetail = () => {
                     isPublic={playlist.is_public}
                   />
                 )}
-                {isOwner && <AddMovieDialog onAdd={handleAdd} />}
+                {isOwner && (
+                  <AddMovieDialog
+                    onAdd={handleAdd}
+                    existingTmdbIds={movies.map((m) => m.tmdb_id)}
+                  />
+                )}
               </div>
             </header>
 
