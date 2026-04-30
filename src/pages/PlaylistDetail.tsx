@@ -21,6 +21,7 @@ import {
   TmdbMovie,
 } from "@/api/movies";
 import { getViewerKey } from "@/lib/viewer";
+import { emojiToOgImage, useDocumentMeta } from "@/lib/useDocumentMeta";
 import { toast } from "@/hooks/use-toast";
 
 const PlaylistDetail = () => {
