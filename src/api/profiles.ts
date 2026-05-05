@@ -34,6 +34,8 @@ export async function fetchProfileById(userId: string): Promise<Profile | null> 
   if (error) throw error;
   return (data as Profile) ?? null;
 }
+
+export async function fetchPlaylistsForUser(
   userId: string,
   opts: { includePrivate?: boolean } = {}
 ): Promise<DiscoverPlaylist[]> {
