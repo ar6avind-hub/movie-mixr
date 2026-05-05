@@ -18,7 +18,7 @@ import { toast } from "@/hooks/use-toast";
 
 const UserProfile = () => {
   const { username } = useParams<{ username: string }>();
-  const { user } = useAuth();
+  const { user, refreshProfile } = useAuth();
   const [profile, setProfile] = useState<Profile | null>(null);
   const [playlists, setPlaylists] = useState<DiscoverPlaylist[]>([]);
   const [loading, setLoading] = useState(true);
