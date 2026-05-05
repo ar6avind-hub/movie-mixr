@@ -32,6 +32,7 @@ const UserProfile = () => {
     try {
       const updated = await updateProfile(profile.id, patch);
       setProfile(updated);
+      if (user && user.id === updated.id) await refreshProfile();
       toast({ title: "Profile updated" });
     } catch (err: any) {
       toast({
