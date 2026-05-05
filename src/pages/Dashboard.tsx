@@ -72,11 +72,6 @@ const Dashboard = () => {
     }
   };
 
-  const greeting =
-    user?.user_metadata?.display_name ||
-    user?.email?.split("@")[0] ||
-    "there";
-
   return (
     <div className="relative min-h-screen">
       <SiteHeader />
@@ -88,7 +83,7 @@ const Dashboard = () => {
               Your library
             </p>
             <h1 className="font-display text-4xl tracking-tight sm:text-6xl">
-              Hello, <span className="italic">{greeting}</span>
+              Hello, <span className="italic">{displayName}</span>
             </h1>
             <p className="text-sm text-muted-foreground">
               {playlists.length === 0
