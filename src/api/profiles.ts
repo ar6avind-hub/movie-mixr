@@ -25,7 +25,15 @@ export async function fetchProfileByUsername(
   return (data as Profile) ?? null;
 }
 
-export async function fetchPlaylistsForUser(
+export async function fetchProfileById(userId: string): Promise<Profile | null> {
+  const { data, error } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", userId)
+    .maybeSingle();
+  if (error) throw error;
+  return (data as Profile) ?? null;
+}
   userId: string,
   opts: { includePrivate?: boolean } = {}
 ): Promise<DiscoverPlaylist[]> {
