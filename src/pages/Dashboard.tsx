@@ -15,7 +15,7 @@ const EXAMPLE_IDEAS = [
 ];
 
 const Dashboard = () => {
-  const { user } = useAuth();
+  const { user, displayName } = useAuth();
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
   const [loading, setLoading] = useState(true);
 
