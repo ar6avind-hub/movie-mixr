@@ -38,11 +38,32 @@ import { toast } from "@/hooks/use-toast";
 
 const PlaylistDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [playlist, setPlaylist] = useState<PlaylistWithOwner | null>(null);
   const [movies, setMovies] = useState<PlaylistMovie[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const handleDeletePlaylist = async () => {
+    if (!playlist) return;
+    setDeleting(true);
+    try {
+      await deletePlaylist(playlist.id);
+      toast({ title: "Playlist deleted" });
+      navigate("/dashboard", { replace: true });
+    } catch (err: any) {
+      setDeleting(false);
+      setConfirmOpen(false);
+      toast({
+        title: "Couldn't delete",
+        description: err.message,
+        variant: "destructive",
+      });
+    }
+  };
 
   const isOwner = !!(user && playlist && user.id === playlist.user_id);
 
