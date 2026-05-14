@@ -276,10 +276,46 @@ const PlaylistDetail = () => {
                   />
                 )}
                 {isOwner && (
-                  <AddMovieDialog
-                    onAdd={handleAdd}
-                    existingTmdbIds={movies.map((m) => m.tmdb_id)}
-                  />
+                  <>
+                    <AddMovieDialog
+                      onAdd={handleAdd}
+                      existingTmdbIds={movies.map((m) => m.tmdb_id)}
+                    />
+                    <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          aria-label="Delete playlist"
+                          title="Delete playlist"
+                          className="text-muted-foreground hover:text-foreground"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete this playlist?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            <span className="text-foreground">{playlist.name}</span> and all
+                            of its films will be permanently removed. This can't be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            disabled={deleting}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleDeletePlaylist();
+                            }}
+                          >
+                            {deleting ? "Deleting…" : "Delete"}
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </>
                 )}
               </div>
             </header>
