@@ -1,6 +1,18 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import { ArrowLeft, Eye, Globe, Lock } from "lucide-react";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { ArrowLeft, Eye, Globe, Lock, Trash2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { deletePlaylist } from "@/api/playlists";
 import { SiteHeader } from "@/components/SiteHeader";
 import { MovieCard } from "@/components/MovieCard";
 import { AddMovieDialog } from "@/components/AddMovieDialog";
@@ -26,11 +38,32 @@ import { toast } from "@/hooks/use-toast";
 
 const PlaylistDetail = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [playlist, setPlaylist] = useState<PlaylistWithOwner | null>(null);
   const [movies, setMovies] = useState<PlaylistMovie[]>([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
+  const handleDeletePlaylist = async () => {
+    if (!playlist) return;
+    setDeleting(true);
+    try {
+      await deletePlaylist(playlist.id);
+      toast({ title: "Playlist deleted" });
+      navigate("/dashboard", { replace: true });
+    } catch (err: any) {
+      setDeleting(false);
+      setConfirmOpen(false);
+      toast({
+        title: "Couldn't delete",
+        description: err.message,
+        variant: "destructive",
+      });
+    }
+  };
 
   const isOwner = !!(user && playlist && user.id === playlist.user_id);
 
@@ -243,10 +276,46 @@ const PlaylistDetail = () => {
                   />
                 )}
                 {isOwner && (
-                  <AddMovieDialog
-                    onAdd={handleAdd}
-                    existingTmdbIds={movies.map((m) => m.tmdb_id)}
-                  />
+                  <>
+                    <AddMovieDialog
+                      onAdd={handleAdd}
+                      existingTmdbIds={movies.map((m) => m.tmdb_id)}
+                    />
+                    <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+                      <AlertDialogTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          aria-label="Delete playlist"
+                          title="Delete playlist"
+                          className="text-muted-foreground hover:text-foreground"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Delete this playlist?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            <span className="text-foreground">{playlist.name}</span> and all
+                            of its films will be permanently removed. This can't be undone.
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+                          <AlertDialogAction
+                            disabled={deleting}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleDeletePlaylist();
+                            }}
+                          >
+                            {deleting ? "Deleting…" : "Delete"}
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
+                  </>
                 )}
               </div>
             </header>

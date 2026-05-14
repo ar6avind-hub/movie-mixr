@@ -106,7 +106,15 @@ export type Database = {
           playlist_id?: string
           viewer_key?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "playlist_views_playlist_id_fkey"
+            columns: ["playlist_id"]
+            isOneToOne: false
+            referencedRelation: "playlists"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       playlists: {
         Row: {
